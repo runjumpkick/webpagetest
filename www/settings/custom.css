@@ -1,0 +1,27 @@
+body { background-color: #FFF; }
+
+.content-wrap { background-color: #DFE5E6; }
+
+.logo { width: 237px; height: 56px; }
+
+.logo a {
+  background-image: url(/images/sn.png);
+  background-repeat: no-repeat;
+}
+
+#nav li.current a { color: #DE2728; }
+
+#advanced_settings { color: #DE2728 !important; }
+
+#advanced_settings .arrow { border-left-color: #DE2728; }
+
+#advanced_settings.extended .arrow { border-top-color: #DE2728; }
+
+.test_menu li.current a { color: #DE2728; }
+
+.start_test { /*background-image: url();*/ }
+
+.notification { background-color: #21ADDD; }
+
+.notification a { color: #000; }
+

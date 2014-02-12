@@ -3,7 +3,6 @@ if(extension_loaded('newrelic')) {
   newrelic_add_custom_tracer('StartProcessingIncrementalResult');
   newrelic_add_custom_tracer('CheckForSpam');
   newrelic_add_custom_tracer('loadPageRunData');
-  newrelic_add_custom_tracer('ProcessAVIVideo');
   newrelic_add_custom_tracer('getBreakdown');
   newrelic_add_custom_tracer('GetVisualProgress');
   newrelic_add_custom_tracer('DevToolsGetConsoleLog');
@@ -12,18 +11,21 @@ if(extension_loaded('newrelic')) {
 
 chdir('..');
 //$debug = true;
-include('common.inc');
-error_reporting(E_ERROR | E_PARSE);
+require_once('common.inc');
 require_once('archive.inc');
 require_once('./lib/pclzip.lib.php');
 require_once 'page_data.inc';
-header('Content-type: text/plain');
-header("Cache-Control: no-cache, must-revalidate");
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-ignore_user_abort(true);
-set_time_limit(60*5);
 require_once('harTiming.inc');
 require_once('./video/avi2frames.inc.php');
+
+if (!isset($included)) {
+  error_reporting(E_ERROR | E_PARSE);
+  header('Content-type: text/plain');
+  header("Cache-Control: no-cache, must-revalidate");
+  header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+  ignore_user_abort(true);
+}
+set_time_limit(60*5);
 
 $location = $_REQUEST['location'];
 $key  = $_REQUEST['key'];
@@ -261,10 +263,8 @@ if( array_key_exists('video', $_REQUEST) && $_REQUEST['video'] )
             $testInfo_dirty = true;
         }
         // pre-process any background processing we need to do for this run
-        if (isset($runNumber) && isset($cacheWarmed)) {
-            loadPageRunData($testPath, $runNumber, $cacheWarmed);
-            ProcessAVIVideo($testInfo, $testPath, $runNumber, $cacheWarmed);
-        }
+        if (isset($runNumber) && isset($cacheWarmed))
+            ProcessAVIVideo($testInfo, $testPath, $runNumber, $cacheWarmed, false);
             
         // see if the test is complete
         if( $done )
